@@ -15,9 +15,10 @@ class CovidSurveyController extends Controller
         // return view('covid-survey.index', compact('covidSurveys'));
         return response()->json($covidSurveys, 200);
     }
-    
+
     public function store(Request $request)
     {
+        $request->date_of_birth ? $request->merge(['date_of_birth' => date('Y-m-d', strtotime($request->dob))]) : null;
         // Validate the request data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255', // Name is required, string, max length 255
@@ -34,14 +35,15 @@ class CovidSurveyController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
+                'error_message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422); // HTTP status code for unprocessable entity
+            ], 400); // HTTP status code for unprocessable entity
         }
 
-        if($request->vaccine_doses > 0 && $request->has('vaccinesTaken')) {
-            for($i = 1; $i <= $request->vaccine_doses; $i++) {
+        if ($request->vaccine_doses > 0 && $request->has('vaccinesTaken')) {
+            for ($i = 1; $i <= $request->vaccine_doses; $i++) {
                 $request->merge([
-                   $i.'_dose_name' => $request->vaccinesTaken[$i - 1]
+                    $i . '_dose_name' => $request->vaccinesTaken[$i - 1]
                 ]);
             }
         }
@@ -51,6 +53,4 @@ class CovidSurveyController extends Controller
 
         return response()->json(['message' => 'Your survey saved successfully. Thanks for you effort.', 'data' => $covidSurvey], 201);
     }
-
-
 }
