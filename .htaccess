@@ -1,0 +1,5 @@
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^survey19.mdatiqur.me$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^survey19.mdatiqur.me$
+RewriteCond %{REQUEST_URI} !public/
+RewriteRule (.*) /public/$1 [L]
