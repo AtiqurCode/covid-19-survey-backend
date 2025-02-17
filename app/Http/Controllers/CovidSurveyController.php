@@ -11,9 +11,10 @@ class CovidSurveyController extends Controller
 
     public function index(Request $request)
     {
-        $covidSurveys = CovidSurvey::latest()->paginate($request->input('per_page', 25));
-        // return view('covid-survey.index', compact('covidSurveys'));
-        return response()->json($covidSurveys, 200);
+        $covidSurveys = CovidSurvey::latest()->paginate($request->input('per_page', 6));
+
+        return view('components.welcome', data: compact('covidSurveys'));
+        // return $covidSurveys;
     }
 
     public function store(Request $request)
