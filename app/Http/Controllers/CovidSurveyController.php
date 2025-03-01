@@ -19,7 +19,6 @@ class CovidSurveyController extends Controller
 
     public function store(Request $request)
     {
-        $request->date_of_birth ? $request->merge(['date_of_birth' => date('Y-m-d', strtotime($request->dob))]) : null;
         // Validate the request data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255', // Name is required, string, max length 255
