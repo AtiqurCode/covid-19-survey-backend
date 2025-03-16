@@ -10,4 +10,7 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('/covid-survey', [CovidSurveyController::class, 'index']);
-Route::post('/covid-survey', [CovidSurveyController::class, 'store']);
+
+Route::middleware(['throttle:api'])->group(function () {
+    Route::post('/covid-survey', [CovidSurveyController::class, 'store']);
+});
